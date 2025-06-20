@@ -200,14 +200,6 @@ def pagina_historico():
     registros = query.order_by(RegistroSaida.data_hora_saida.desc()).all()
     return render_template('historico.html', registros=registros)
 
-# --- ROTA TEMPORÁRIA PARA CRIAR O BANCO DE DADOS ---
-@app.route('/criar-banco-de-dados-secreto')
-def criar_banco():
-    try:
-        db.create_all()
-        return "Tabelas do banco de dados criadas com sucesso!"
-    except Exception as e:
-        return f"Ocorreu um erro ao criar as tabelas: {e}"
 
 # --- INICIALIZAÇÃO DA APLICAÇÃO ---
 if __name__ == '__main__':
