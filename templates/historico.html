@@ -1,0 +1,60 @@
+{% extends "layout_base.html" %}
+
+{% block title %}Histórico de Saídas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Histórico de Saídas</h1>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Filtrar Registros</h5>
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="nome_aluno" class="form-label">Buscar por Nome do Aluno</label>
+                <input type="text" class="form-control" name="nome_aluno" id="nome_aluno" value="{{ request.args.get('nome_aluno', '') }}">
+            </div>
+            <div class="col-md-4">
+                <label for="data" class="form-label">Filtrar por Data</label>
+                <input type="date" class="form-control" name="data" id="data" value="{{ request.args.get('data', '') }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+                <a href="{{ url_for('pagina_historico') }}" class="btn btn-outline-secondary">Limpar Filtros</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Aluno</th>
+                    <th scope="col">Retirado por</th>
+                    <th scope="col">Data e Hora da Saída</th>
+                    <th scope="col">Atendente</th>
+                    <th scope="col">Observações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro.aluno_nome }}</td>
+                    <td>{{ registro.responsavel_nome }}</td>
+                    <td>{{ registro.data_hora_saida.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>{{ registro.atendente_nome }}</td>
+                    <td>{{ registro.observacoes }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center p-4">Nenhum registro encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+/* Importa uma fonte mais moderna do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+/* Define a paleta de cores do Carbonell como variáveis globais */
+:root {
+    --carbonell-azul-escuro: #2b3a6c;
+    --carbonell-azul-marinho: #1e2a4d;
+    --carbonell-amarelo: #f7b53b;
+    --carbonell-vermelho: #d82a2b;
+    --carbonell-branco: #ffffff;
+    --fundo-claro: #f8f9fa; /* Um cinza bem claro para o fundo */
+}
+
+/* Aplica a nova fonte e cor de fundo a toda a página */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--fundo-claro);
+    color: var(--carbonell-azul-marinho);
+}
+
+/* Personaliza os botões principais com as cores da marca */
+.btn-primary {
+    background-color: var(--carbonell-azul-escuro);
+    border-color: var(--carbonell-azul-escuro);
+}
+.btn-primary:hover {
+    background-color: var(--carbonell-azul-marinho);
+    border-color: var(--carbonell-azul-marinho);
+}
+
+.btn-success {
+    background-color: var(--carbonell-amarelo);
+    border-color: var(--carbonell-amarelo);
+    color: var(--carbonell-azul-marinho);
+}
+.btn-success:hover {
+    background-color: #e4a835; /* Um amarelo um pouco mais escuro */
+    border-color: #e4a835;
+    color: var(--carbonell-azul-marinho);
+}
+
+.btn-danger, .btn-outline-danger:hover {
+    background-color: var(--carbonell-vermelho);
+    border-color: var(--carbonell-vermelho);
+    color: var(--carbonell-branco);
+}
+.btn-outline-danger {
+    border-color: var(--carbonell-vermelho);
+    color: var(--carbonell-vermelho);
+}
+
+/* Estilo para o cabeçalho principal */
+.header-main {
+    background-color: var(--carbonell-branco);
+    padding: 1rem 0;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-main img.logo {
+    height: 50px;
+}
+
+/* Container do logo na tela de login */
+.login-logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-logo-container img {
+    max-width: 120px;
+    height: auto;
+}
+
+.card-action {
+    padding: 1.5rem;
+    transition: all 0.2s ease-in-out;
+    color: var(--carbonell-azul-marinho);
+    text-decoration: none;
+    height: 100%;
+}
+
+.card-action:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    color: var(--carbonell-azul-escuro);
+}
+
+.card-action .icon {
+    font-size: 3rem; /* Tamanho grande para o ícone */
+    margin-bottom: 1rem;
+    color: var(--carbonell-azul-escuro);
+}

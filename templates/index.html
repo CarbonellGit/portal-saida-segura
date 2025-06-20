@@ -1,0 +1,50 @@
+{% extends "layout_base.html" %}
+
+{% block title %}Busca de Alunos - Portal Saída Segura{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Portal Saída Segura</h1>
+    <p class="lead">Busque o aluno para ver as autorizações de saída.</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('pagina_inicial') }}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="nome_aluno" placeholder="Digite o nome ou parte do nome do aluno..." required>
+                        <button class="btn btn-primary" type="submit">Buscar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if alunos %}
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+        <h3 class="mb-3">Resultados da Busca</h3>
+        {% for aluno in alunos %}
+        <a href="{{ url_for('detalhes_aluno', aluno_id=aluno.codigo) }}" class="text-decoration-none text-dark">
+            <div class="card mb-3 card-aluno">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-1">{{ aluno.nome }}</h5>
+                            {% if aluno.turmas %}
+                                <p class="card-text text-muted mb-0">Turma: {{ aluno.turmas[0].descricao }}</p>
+                            {% endif %}
+                        </div>
+                        <span class="badge bg-primary rounded-pill">Ver Detalhes</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
