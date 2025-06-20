@@ -1,4 +1,4 @@
-# app.py - Versão final, pronta para produção e com todas as senhas seguras
+# app.py - Versão com rota temporária para criar o banco de dados
 
 import os
 import requests
@@ -9,8 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
 
-# Carrega as variáveis de ambiente do arquivo .env
-# Isso é usado apenas para o desenvolvimento local
 load_dotenv()
 
 # --- Leitura e Validação das Variáveis de Ambiente ---
@@ -18,25 +16,20 @@ SOPHIA_TENANT = os.environ.get('SOPHIA_TENANT')
 SOPHIA_USER = os.environ.get('SOPHIA_USER')
 SOPHIA_PASSWORD = os.environ.get('SOPHIA_PASSWORD')
 SOPHIA_API_HOSTNAME = os.environ.get('SOPHIA_API_HOSTNAME', 'portal.sophia.com.br')
-# --- MUDANÇA AQUI: Lendo a senha do admin e a chave secreta do ambiente ---
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# Validação para garantir que todas as variáveis de ambiente foram carregadas
 if not all([SOPHIA_TENANT, SOPHIA_USER, SOPHIA_PASSWORD, ADMIN_PASSWORD, SECRET_KEY]):
-    raise ValueError("Erro: Uma ou mais variáveis de ambiente essenciais não foram configuradas no arquivo .env")
-
+    raise ValueError("Erro: Uma ou mais variáveis de ambiente essenciais não foram configuradas.")
 
 # --- Configurações da Aplicação ---
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-# --- MUDANÇA AQUI: Usando as variáveis lidas do ambiente ---
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['ADMIN_PASSWORD'] = ADMIN_PASSWORD
 app.config['SOPHIA_API_BASE_URL'] = f"https://{SOPHIA_API_HOSTNAME}/SophiAWebApi/{SOPHIA_TENANT}"
 
-
-# --- Configuração do Banco de Dados (para Local e Produção) ---
+# --- Configuração do Banco de Dados ---
 database_url = os.environ.get('DATABASE_URL')
 if database_url:
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url.replace("postgres://", "postgresql://", 1)
@@ -48,6 +41,7 @@ db = SQLAlchemy(app)
 
 # --- Modelo do Banco de Dados ---
 class RegistroSaida(db.Model):
+    # (código do modelo do banco de dados permanece o mesmo)
     __tablename__ = 'registros_saida'
     id = db.Column(db.Integer, primary_key=True)
     aluno_nome = db.Column(db.String(200), nullable=False)
@@ -56,7 +50,7 @@ class RegistroSaida(db.Model):
     atendente_nome = db.Column(db.String(100), nullable=False)
     observacoes = db.Column(db.Text, nullable=True)
 
-# --- Funções Auxiliares para a API ---
+# ... (todas as outras rotas e funções permanecem as mesmas) ...
 def get_sophia_token():
     auth_url = app.config['SOPHIA_API_BASE_URL'] + "/api/v1/Autenticacao"
     auth_data = {"usuario": SOPHIA_USER, "senha": SOPHIA_PASSWORD}
@@ -68,7 +62,6 @@ def get_sophia_token():
         print(f"Erro de Conexão/HTTP na API ({auth_url}): {e}")
         return None
 
-# --- Rotas da Aplicação ---
 @app.route('/', methods=['GET', 'POST'])
 def pagina_inicial():
     alunos_encontrados = []
@@ -207,8 +200,15 @@ def pagina_historico():
     registros = query.order_by(RegistroSaida.data_hora_saida.desc()).all()
     return render_template('historico.html', registros=registros)
 
+# --- ROTA TEMPORÁRIA PARA CRIAR O BANCO DE DADOS ---
+@app.route('/criar-banco-de-dados-secreto')
+def criar_banco():
+    try:
+        db.create_all()
+        return "Tabelas do banco de dados criadas com sucesso!"
+    except Exception as e:
+        return f"Ocorreu um erro ao criar as tabelas: {e}"
+
 # --- INICIALIZAÇÃO DA APLICAÇÃO ---
 if __name__ == '__main__':
-    # No servidor de produção, o Gunicorn vai rodar a aplicação, então
-    # o app.run() não será chamado. Mas é bom tê-lo para o desenvolvimento local.
     app.run()
