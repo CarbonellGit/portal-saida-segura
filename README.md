@@ -1,6 +1,5 @@
 # Portal Saída Segura - Colégio Carbonell
 
-![Logo do Colégio Carbonell](https://i.imgur.com/uRmiP2c.png)
 
 ## Sobre o Projeto
 
